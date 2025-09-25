@@ -71,6 +71,59 @@ def ej3():
         np.savetxt(f"Ej3_f{k}_simpson.txt", DataS, delimiter=',')
 
     impresora(f,F,a,b,1)
+    # print(np.loadtxt("Ej3_f1_trapecio.txt",delimiter=','))
+    impresora(f2,F2,a2,b2,2)
+    impresora(f3,F3,a,b,3)
+
+
+def ej5():
+    t_i = [0,1,4,6,8,12,16,20]
+    c_i = [12,22,32,45,58,75,70,48]  
+    Q   = 0.3
+    c_iQ = [Q*k for k in c_i]
+    trap = trapcomp(t_i,c_iQ)
+    print(trap)
+
+def ej7():
+    f = lambda t: t*(t-1)*(t-2)+2
+    dfdt = lambda t: 3*(t**2)-6*t+2
+    dint = lambda t: f(t)*np.sqrt(1+(dfdt(t)**2)) 
+    a,b =[0,3]
+    CotaError = 1e-3
+    #int = 2*pi * int_a^b f*sqrt(1+f'^2)
+    # f' = 3t^2-6t+2
+    k = 1
+    integral2 = 0
+    Error = np.inf
+    while Error >= CotaError:
+        integral = 2*np.pi*intNCcompuesta(dint,a,b,10*2**k,3)
+        Error = np.abs(integral-integral2)
+        integral2 = integral
+        k+=1
+    print(f"El Área vale {integral} y {k = }")
+    
+
+def ej8():
+    f = lambda t: 1+t+np.cos(t)
+    dfdt = lambda t: 1-np.sin(t)
+    dint = lambda t: f(t)*np.sqrt(1+(dfdt(t)**2)) 
+    a,b =[0,4]
+    CotaError = 1e-13
+    #int = 2*pi * int_a^b f*sqrt(1+f'^2)
+    k = 1
+    integral2 = 0
+    Error = np.inf
+    while Error >= CotaError:
+        integral = 2*np.pi*intNCcompuesta(dint,a,b,10*2**k,3)
+        Error = np.abs(integral-integral2)
+        integral2 = integral
+        k+=1
+        if k>1000:
+            raise ValueError(f"Se supero el límite de iteraciones,{integral = }, {k = }, {Error = }")
+            return 
+    return f"El Área vale {integral}, {k = } y {Error = }"
+    
+
     print(np.loadtxt("Ej3_f1_trapecio.txt",delimiter=','))
     impresora(f2,F2,a2,b2,2)
     impresora(f3,F3,a,b,3)
