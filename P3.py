@@ -75,7 +75,6 @@ def ej3():
     impresora(f2,F2,a2,b2,2)
     impresora(f3,F3,a,b,3)
 
-
 def ej5():
     t_i = [0,1,4,6,8,12,16,20]
     c_i = [12,22,32,45,58,75,70,48]  
@@ -100,8 +99,7 @@ def ej7():
         Error = np.abs(integral-integral2)
         integral2 = integral
         k+=1
-    print(f"El Área vale {integral} y {k = }")
-    
+    print(f"El Área vale {integral} y {k = }")    
 
 def ej8():
     f = lambda t: 1+t+np.cos(t)
@@ -122,10 +120,55 @@ def ej8():
             raise ValueError(f"Se supero el límite de iteraciones,{integral = }, {k = }, {Error = }")
             return 
     return f"El Área vale {integral}, {k = } y {Error = }"
+
+
+def ej9():
+    datos = np.loadtxt("DatosTP3\Energias_renovables.txt")
+    tiempo = [t[0] for t in datos ]
+    ET = [E[1]+E[2]+E[3]+E[4] for E in datos]
+    D = [100*ET[i]/datos[i][5] for i in range(len(datos))]
+    plt.plot(tiempo,ET, color="orange", label="Potencia Electrica")
+    plt.plot(tiempo,D, color="red", label="Demanda")
+
+    Dmax = [tiempo[D.index(max(D))],max(D)]
+    Dmin = [tiempo[D.index(min(D))],min(D)]
+    ETmax = [tiempo[ET.index(max(ET))],max(ET)]
+    print(f"La minima demanda es {Dmin[1]} y se da en t = {Dmin[0]}")
+    print(f"La maxima demanda es {Dmax[1]} y se da en t = {Dmax[0]}")
+    print(f"La maxima energia renovable es {ETmax[1]} y se da en t = {ETmax[0]}")
+    plt.vlines(Dmin[0],ymin=0,ymax=Dmin[1],linestyle='--',color="black")
+    plt.hlines(Dmin[1],xmin=0,xmax=Dmin[0],linestyle='--',color="black")
+    plt.vlines(Dmax[0],ymin=0,ymax=Dmax[1],linestyle='--',color="black")
+    plt.vlines(ETmax[0],ymin=0,ymax=ETmax[1],linestyle='--',color="black")
+    plt.hlines(Dmax[1],xmin=0,xmax=Dmax[0],linestyle='--',color="black")
+    plt.hlines(ETmax[1],xmin=0,xmax=ETmax[0],linestyle='--',color="black")
+    plt.scatter(Dmax[0],Dmax[1],color="green",label = "Demanda maxima")
+    plt.scatter(ETmax[0],ETmax[1],color="forestgreen",label = "Energia maxima")
+    plt.scatter(Dmin[0],Dmin[1],color="cyan",label = "Demanda minima")
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+    ETP = simpsoncomp(tiempo,ET)
+    print(f"Se genero un total de {ETP} MWh de energía renovable")
+    DT = simpsoncomp(tiempo,D)
+    print(f"representa un %{ETP*100/DT} de la demanda")
+
+
+    Fmax = [tiempo[[E[2] for E in datos].index(max([E[2] for E in datos]))],max([E[2] for E in datos])]
+    print(f"La mayor potencia fotovoltaica es {Fmax[1]} y se dio en t = {Fmax[0]}")
+    EET = simpsoncomp(tiempo,[E[1] for E in datos])
+    print(f"Se genero un total de {EET} MWh a partir de la energia eólica, representa un %{100*EET/ETP} de la energia producida")
+    print(f"")
+    plt.plot(tiempo,[E[1] for E in datos],label="Eólica")
+    plt.plot(tiempo,[E[2] for E in datos],label="Fotovoltaica")
+    plt.plot(tiempo,[E[3] for E in datos],label="Bioenergías")
+    plt.plot(tiempo,[E[4] for E in datos],label="Hidráulica")
+    plt.vlines(Fmax[0],ymin=0,ymax=Fmax[1],linestyle='--',color="black")
+    plt.hlines(Fmax[1],xmin=0,xmax=Fmax[0],linestyle='--',color="black")
+    plt.scatter(Fmax[0],Fmax[1],label=r"$E_f max$")
+    plt.grid()
+    plt.legend()
+    plt.show()
     
-
-    print(np.loadtxt("Ej3_f1_trapecio.txt",delimiter=','))
-    impresora(f2,F2,a2,b2,2)
-    impresora(f3,F3,a,b,3)
-
-
+ej9()
