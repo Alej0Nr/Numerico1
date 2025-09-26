@@ -123,7 +123,7 @@ def ej8():
 
 
 def ej9():
-    datos = np.loadtxt("DatosTP3\Energias_renovables.txt")
+    datos = np.loadtxt("Energias_renovables.txt")
     tiempo = [t[0] for t in datos ]
     ET = [E[1]+E[2]+E[3]+E[4] for E in datos]
     D = [100*ET[i]/datos[i][5] for i in range(len(datos))]
@@ -171,4 +171,5 @@ def ej9():
     plt.legend()
     plt.show()
     
+
 ej9()
