@@ -99,7 +99,7 @@ def ej7():
         Error = np.abs(integral-integral2)
         integral2 = integral
         k+=1
-    print(f"El Área vale {integral} y {k = }")    
+    print(f"El Área vale {integral} y {k = }")   
 
 def ej8():
     f = lambda t: 1+t+np.cos(t)
@@ -172,4 +172,76 @@ def ej9():
     plt.show()
     
 
-ej9()
+def ej10():
+    f = lambda t: 3*(t+0.5)*np.sin((t-2.7)/2)**4
+    dfdt = lambda t: 3 *np.sin(0.5 *(-2.7 + t))**3 *(2 *(0.5 + t) *np.cos(1.35 - 0.5 *t) + np.sin(0.5 *(-2.7 + t)))
+    a, b = [0,2.4]
+    area = AreaRevolucion(f,dfdt,a,b,1e-3)
+    print(area) 
+    tiempo = np.linspace(a,b,1000)
+    plt.plot(tiempo,f(tiempo))
+    plt.grid()
+    plt.show() ## es la (e)
+    print(f"Se requieren {3*area/7} litros de pintura")
+
+def ej11():
+    L = 20
+    A = 0.15
+    c = 0.092
+    rho = 8.94
+    u = lambda x,t: x*(40-x)+(t+1)**2*np.exp(-t)
+    print(A*c*rho*intNCcompuesta(lambda x: u(x,0),0,L,1000,3)) #a)
+    tiempo = np.linspace(0,100,1000) 
+    E=[]
+    for t in tiempo:
+        E.append(A*c*rho*intNCcompuesta(lambda x: u(x,t),0,L,1000,3))
+    print(f"El momento con mayor energía termica total es t = {tiempo[E.index(max(E))]} con E(t) = {max(E)}")
+    plt.plot(tiempo,E)
+    plt.grid()
+    plt.show()
+    # no se como concluir el (c)
+
+def ej12():
+    L = 1
+    A = 0.01
+    c=1
+    rho = 1
+    datos = np.loadtxt("datos_temperatura.txt")
+    tiempo = np.arange(0,2.005,0.005)
+    
+    puntos = np.linspace(0,L,41)
+    u = lambda x,t: x*(40-x)+(t+1)**2*np.exp(-t)
+    T1 = simpsoncomp(puntos,datos[int(1/0.005)])
+    print(T1)
+    ET=[]
+    for k in range(len(tiempo)):
+        ET.append(simpsoncomp(puntos,datos[k]))
+    
+    Emin = [min(ET),tiempo[ET.index(min(ET))]]
+    Emax = [max(ET),tiempo[ET.index(max(ET))]]
+    print(f"El minimo es {Emin[0]} y se da en t = {Emin[1]}")
+    print(f"El maximo es {Emax[0]} y se da en t = {Emax[1]}")
+
+    
+def ej13():
+    R = 1
+    c = 1
+    rho = 1
+    theta = np.linspace(-np.pi,np.pi,1000)
+    u = lambda r, theta: 10+r**3*np.cos(3*theta)+2*r**2*np.sin(2*theta)
+    int = lambda r,theta: u(r,theta)*r
+    ET=[]
+    for t in theta:
+        ET.append(intNCcompuesta(lambda r: int(r,t),0,R,1000,3))
+    print(f"La energía total es {trapcomp(theta,ET)}")
+    print(f"Analiticamente se llega a que es {10*np.pi*rho*c}") # Esta es la solución analitica
+
+# def ej14():
+#     Q = 30
+#     datos = np.loadtxt("datos_muestreo.txt", skiprows=1)
+#     t = datos[:,0]
+#     c= datos[:,1]
+#     cb = datos[:,2]
+
+
+# def ej15():

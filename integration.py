@@ -57,5 +57,15 @@ def simpsoncomp(x,y):
     Q=h/6 * (y[0] + 4*sum(y[1:-1:2]) + 2*sum(y[2:-2:2]) + y[-1])
     return Q
 
-
+def AreaRevolucion(f,df,a,b,CotaError):
+    inte = lambda t: f(t)*np.sqrt(1+(df(t))**2)
+    k = 1
+    integral2 = 0
+    Error = np.inf
+    while Error >= CotaError:
+        integral = 2*np.pi*intNCcompuesta(inte,a,b,10*2**k,3)
+        Error = np.abs(integral-integral2)
+        integral2 = integral
+        k+=1
+    return integral
     
