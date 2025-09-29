@@ -244,4 +244,17 @@ def ej13():
 #     cb = datos[:,2]
 
 
-# def ej15():
+def ej15():
+    x = lambda t: 6*np.cos(t)
+    y = lambda t: 4.8*np.sin(t)
+    dxdt = lambda t: -6*np.sin(t)
+    dydt = lambda t: 4.8*np.cos(t)
+    int = lambda t: np.sqrt(dxdt(t)**2+dydt(t)**2)
+    tiempo = np.linspace(0,2*np.pi,1000)
+    Arco = trapcomp(tiempo,int(tiempo))
+    print(Arco)
+    plt.plot(x(tiempo),y(tiempo))
+    plt.grid()
+    plt.show()
+
+ej15()

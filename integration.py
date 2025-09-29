@@ -68,4 +68,15 @@ def AreaRevolucion(f,df,a,b,CotaError):
         integral2 = integral
         k+=1
     return integral
+
+def intNCcompuesta_h(f,a,b,Cota_Error,n):
+    integrales = [intNCcompuesta(f,a,b,10,n),intNCcompuesta(f,a,b,20,n)]
+    i=2
+    while np.abs(integrales[-2]-integrales[-1])<Cota_Error:
+        integrales.append(intNCcompuesta(f,a,b,10*2**i,n))
+        i+=1
+    h = np.abs((b-a)/(10*2**(i)))
+    return integrales[-1],h,10*2**(i)
+
+
     
